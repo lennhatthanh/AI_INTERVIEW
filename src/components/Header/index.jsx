@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import NavBar from "../NavBar";
 
 export default function Header() {
     const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
@@ -21,12 +22,12 @@ export default function Header() {
                         <h1 class="text-xl font-bold text-foreground hidden sm:block">Interview Generator</h1>
                     </Link>
                     <span class="flex items-center gap-6">
-                        <Link to="/" class="transition text-primary font-semibold">
+                        <NavBar>
                             Generate
-                        </Link>
-                        <Link to="/history" class="transition text-muted-foreground hover:text-foreground">
+                        </NavBar>
+                        <NavBar>
                             History
-                        </Link>
+                        </NavBar>
                         <button
                             onClick={handleTheme}
                             class="p-2 rounded-lg hover:bg-muted transition"

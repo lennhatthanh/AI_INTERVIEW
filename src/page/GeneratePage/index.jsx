@@ -14,26 +14,39 @@ export default function GeneratePage() {
         const prompt = `
 Bạn là một AI chuyên tạo câu hỏi phỏng vấn ${inputValue}.
 
-Hãy tạo và chỉ trả về **một mảng JSON hợp lệ** (có thể parse trực tiếp bằng JSON.parse() trong JavaScript) gồm 1–5 câu hỏi phỏng vấn ${inputValue} phù hợp với trình độ và ngôn ngữ được cung cấp.
+Hãy tạo và chỉ trả về **một mảng JSON hợp lệ** (có thể parse trực tiếp bằng JSON.parse() trong JavaScript) gồm **chính xác 6 câu hỏi phỏng vấn** về ${inputValue}, phù hợp với trình độ và ngôn ngữ được cung cấp.
 
 Mỗi phần tử trong mảng phải có cấu trúc:
 [
   {
     "title": "string",
-    "content": "string" // nội dung chi tiết, được viết bằng Markdown, nhưng phải là chuỗi JSON hợp lệ (dùng \\n để xuống dòng, cỡ chữ của các phần lớn hơn), có 4 phần Key Concepts, Explanation, Best Practices, Common Mistakes
+    "content": "string" // nội dung chi tiết, được viết bằng Markdown thuần, nhưng phải là chuỗi JSON hợp lệ (dùng \\n thay vì xuống dòng thật).
   }
 ]
 
-Trình độ (Level): ${inputLevel}
-Ngôn ngữ (Language): ${inputLanguage}
+Yêu cầu về "content":
+- Gồm **4 phần rõ ràng** theo thứ tự:
+  1. **Key Concepts**
+  2. **Explanation**
+  3. **Example**
+  3. **Best Practices**
+  4. **Common Mistakes**
+- Dùng Markdown thuần để trình bày (các tiêu đề, danh sách, in đậm, in nghiêng, code block...).
+- Giữa các phần nên ngăn cách bằng: \\n\\n---\\n\\n để hiển thị gọn gàng khi render.
+- Tất cả nội dung phải dùng \\n để xuống dòng (không dùng xuống dòng thật).
+- **Không được có dấu \`\`\` hoặc ký tự ngoài JSON.**
+- Kết quả phải **parse được bằng JSON.parse() mà không lỗi.**
 
-Yêu cầu:
-- **Chỉ trả về mảng JSON hợp lệ**, không có dấu \`\`\`, không có ký tự ngoài JSON.
-- Toàn bộ kết quả có thể parse được bằng JSON.parse() mà không báo lỗi.
-- "content" có thể chứa Markdown (bold, list, code...) nhưng **phải dùng \\n thay vì xuống dòng thật**.
-- Nếu ngôn ngữ là English → viết chuyên nghiệp, dễ hiểu.
-- Nếu ngôn ngữ là Vietnamese → dịch tự nhiên, rõ ràng, dùng thuật ngữ quen thuộc.
+Ngôn ngữ & trình độ:
+- Trình độ (Level): ${inputLevel}
+- Ngôn ngữ (Language): ${inputLanguage}
+
+Ghi chú thêm:
+- Nếu ngôn ngữ là English → Viết chuyên nghiệp, rõ ràng, dễ hiểu, giống phong cách câu hỏi phỏng vấn kỹ thuật.
+- Nếu ngôn ngữ là Vietnamese → Dịch tự nhiên, gần gũi, rõ ràng, dùng thuật ngữ quen thuộc.
+- Văn phong nhất quán, dễ đọc và hiển thị đẹp khi render Markdown.
 `;
+
         setLoading(true);
         const genAI = new GoogleGenerativeAI(import.meta.env.VITE_API_KEY);
         const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
@@ -70,6 +83,10 @@ Yêu cầu:
             handleSubmit();
         }
     };
+    const handleClear = () => {
+        setSession({});
+        setInputValue("");
+    }
     return (
         <div className="max-w-4xl mx-auto">
             <div className="space-y-6 bg-card p-6 rounded-lg border border-border mb-8">
@@ -120,7 +137,7 @@ Yêu cầu:
                 </div>
                 {inputValue.length === 0 || loading ? (
                     <Button className="w-full" disabled>
-                        Generate Question
+                        Generating...
                     </Button>
                 ) : (
                     <Button onClick={handleSubmit} className="w-full">
@@ -137,7 +154,7 @@ Yêu cầu:
                     >
                         Save this session
                     </button>
-                    <button class="px-6 py-2 bg-secondary text-secondary-foreground rounded-lg hover:opacity-90 transition">
+                    <button onClick={handleClear} class="px-6 py-2 bg-secondary text-secondary-foreground rounded-lg hover:opacity-90 transition">
                         Clear
                     </button>
                 </div>
