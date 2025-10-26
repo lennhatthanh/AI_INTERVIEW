@@ -35,7 +35,7 @@ export default function Header() {
                             Generate
                         </Link>
                         <Link
-                            to={"/"}
+                            to={"/history"}
                             className={`transition ${
                                 pathname === "/"
                                     ? "text-primary font-semibold"
