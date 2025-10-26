@@ -25,9 +25,9 @@ export default function Header() {
                     </Link>
                     <span class="flex items-center gap-6">
                         <Link
-                            to={"/history"}
+                            to={"/"}
                             className={`transition ${
-                                pathname === "/history"
+                                pathname === "/"
                                     ? "text-primary font-semibold"
                                     : "text-muted-foreground hover:text-foreground"
                             } `}
@@ -37,7 +37,7 @@ export default function Header() {
                         <Link
                             to={"/history"}
                             className={`transition ${
-                                pathname === "/"
+                                pathname === "/history"
                                     ? "text-primary font-semibold"
                                     : "text-muted-foreground hover:text-foreground"
                             } `}
