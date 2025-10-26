@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import NavBar from "../NavBar";
 
 export default function Header() {
     const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+    const location = useLocation();
+    const pathname = location.pathname;
     const handleTheme = () => {
         theme === "light" ? setTheme("dark") : setTheme("light");
     };
@@ -22,12 +24,26 @@ export default function Header() {
                         <h1 class="text-xl font-bold text-foreground hidden sm:block">Interview Generator</h1>
                     </Link>
                     <span class="flex items-center gap-6">
-                        <NavBar>
+                        <Link
+                            to={"/history"}
+                            className={`transition ${
+                                pathname === "/history"
+                                    ? "text-primary font-semibold"
+                                    : "text-muted-foreground hover:text-foreground"
+                            } `}
+                        >
                             Generate
-                        </NavBar>
-                        <NavBar>
+                        </Link>
+                        <Link
+                            to={"/"}
+                            className={`transition ${
+                                pathname === "/"
+                                    ? "text-primary font-semibold"
+                                    : "text-muted-foreground hover:text-foreground"
+                            } `}
+                        >
                             History
-                        </NavBar>
+                        </Link>
                         <button
                             onClick={handleTheme}
                             class="p-2 rounded-lg hover:bg-muted transition"

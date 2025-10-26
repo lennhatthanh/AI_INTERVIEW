@@ -25,18 +25,17 @@ Mỗi phần tử trong mảng phải có cấu trúc:
 ]
 
 Yêu cầu về "content":
-- Gồm **4 phần rõ ràng** theo thứ tự:
-  1. **Key Concepts**
-  2. **Explanation**
-  3. **Example**
-  3. **Best Practices**
-  4. **Common Mistakes**
-- Dùng Markdown thuần để trình bày (các tiêu đề, danh sách, in đậm, in nghiêng, code block...).
+- Gồm **5 phần rõ ràng** theo thứ tự, mỗi phần có heading Markdown cỡ lớn:
+  1. **# Key Concepts**
+  2. **## Explanation**
+  3. **## Example**
+  4. **## Best Practices**
+  5. **## Common Mistakes**
 - Giữa các phần nên ngăn cách bằng: \\n\\n---\\n\\n để hiển thị gọn gàng khi render.
-- Tất cả nội dung phải dùng \\n để xuống dòng (không dùng xuống dòng thật).
+- Toàn bộ nội dung phải dùng \\n để xuống dòng (không dùng xuống dòng thật).
 - **Không được có dấu \`\`\` hoặc ký tự ngoài JSON.**
 - Kết quả phải **parse được bằng JSON.parse() mà không lỗi.**
-
+- Không trả về --- hoặc ngăn cách dòng
 Ngôn ngữ & trình độ:
 - Trình độ (Level): ${inputLevel}
 - Ngôn ngữ (Language): ${inputLanguage}
@@ -56,6 +55,7 @@ Ghi chú thêm:
                 result.response.candidates[0].content.parts[0].text
                     .replace(/```json\s*/g, "")
                     .replace(/```/g, "")
+                    .replaceAll('---', '')
                     .trim()
             )
         );
@@ -76,7 +76,7 @@ Ghi chú thêm:
                 },
             ])
         );
-        alert("Lưu thành công")
+        alert("Lưu thành công");
     };
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
@@ -86,7 +86,7 @@ Ghi chú thêm:
     const handleClear = () => {
         setSession({});
         setInputValue("");
-    }
+    };
     return (
         <div className="max-w-4xl mx-auto">
             <div className="space-y-6 bg-card p-6 rounded-lg border border-border mb-8">
@@ -154,7 +154,10 @@ Ghi chú thêm:
                     >
                         Save this session
                     </button>
-                    <button onClick={handleClear} class="px-6 py-2 bg-secondary text-secondary-foreground rounded-lg hover:opacity-90 transition">
+                    <button
+                        onClick={handleClear}
+                        class="px-6 py-2 bg-secondary text-secondary-foreground rounded-lg hover:opacity-90 transition"
+                    >
                         Clear
                     </button>
                 </div>
